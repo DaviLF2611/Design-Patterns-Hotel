@@ -112,9 +112,7 @@ src/
 │   ├── Hospede.java
 │   ├── Quarto.java
 │   ├── Reserva.java
-│   ├── ReservaBuilder.java
-│   ├── ReservaCalculavel.java
-│   └── ServicoAdicionalDecorator.java
+│   └── ReservaBuilder.java
 └── test/java/br/com/hotel/model/
     └── ReservaBuilderTest.java
 ```
