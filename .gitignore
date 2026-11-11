@@ -1,6 +1,24 @@
 # Compiled class file
 *.class
 
+# Java build output
+target/
+build/
+out/
+
+# Gradle
+.gradle/
+
+# IDE files
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.metadata/
+nbproject/private/
+.nb-gradle/
+
 # Log file
 *.log
 
