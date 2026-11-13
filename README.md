@@ -11,7 +11,7 @@ compor o valor da reserva com serviços adicionais.
 - Validação de campos obrigatórios e do período da reserva.
 - Cálculo de diárias e valor total da hospedagem.
 - Inclusão combinável de serviços adicionais (café da manhã, estacionamento,
-  spa) e de descontos no preço, sem alterar a reserva original.
+  spa, Wi-Fi) e de descontos no preço, sem alterar a reserva original.
 - Listagem dos serviços contratados em cada reserva.
 
 ## Tecnologias e pré-requisitos
@@ -81,6 +81,7 @@ Regras de cada decorador (considerando uma reserva de 3 diárias a 250,00):
 | `CafeDaManhaDecorator` | 40,00 por pessoa e por diária | 240,00 (2 pessoas) |
 | `EstacionamentoDecorator` | 25,00 por diária | 75,00 |
 | `SpaDecorator` | 100,00 por estadia | 100,00 |
+| `WifiDecorator` | 15,00 por diária | 45,00 |
 | `DescontoPercentualDecorator` | abate um percentual do total acumulado | depende da cadeia |
 | `PetDecorator` | 25,00 por pet e por diária | 150,00 (2 pets) |
 
@@ -110,6 +111,7 @@ import br.com.hotel.model.ReservaBuilder;
 import br.com.hotel.model.ReservaCalculavel;
 import br.com.hotel.model.SpaDecorator;
 import br.com.hotel.model.PetDecorator;
+import br.com.hotel.model.WifiDecorator;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 ```
@@ -133,8 +135,8 @@ import java.time.LocalDate;
   - `ReservaDecorator`: decorador abstrato (Template Method). Guarda o
     componente envolvido, soma `calcularAcrescimo()` ao total dele e acrescenta
     `descricao()` à lista de serviços.
-  - `CafeDaManhaDecorator`, `EstacionamentoDecorator`, `SpaDecorator`,`PetDecorator` e
-    `DescontoPercentualDecorator`: decoradores concretos, cada um com sua
+  - `CafeDaManhaDecorator`, `EstacionamentoDecorator`, `SpaDecorator`, `WifiDecorator`,
+    `PetDecorator` e `DescontoPercentualDecorator`: decoradores concretos, cada um com sua
     própria regra de cálculo.
 - **Problema resolvido:** permite adicionar serviços e descontos, combiná-los
   em cadeia e listar o que foi contratado sem modificar a classe `Reserva` nem
@@ -155,6 +157,7 @@ src/
 │   ├── ReservaCalculavel.java
 │   ├── ReservaDecorator.java
 │   ├── SpaDecorator.java
+│   ├── WifiDecorator.java
 │   └── PetDecorator.java
 └── test/java/br/com/hotel/model/
     ├── ReservaBuilderTest.java
@@ -171,3 +174,4 @@ elaboração deste README.
 - **Davi Luiz Francisco:** domínio do sistema e implementação do padrão Builder.
 - **Ismael Damasceno:** implementação do padrão Decorator.
 - **Enzo Coelho Morona:** implementação do PetDecorator.
+- **Ísis Enya D'Agostin Flor:** implementação do WifiDecorator.

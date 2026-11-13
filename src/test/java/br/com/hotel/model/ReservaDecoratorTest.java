@@ -53,6 +53,14 @@ class ReservaDecoratorTest {
     }
 
     @Test
+    void wifiCobraPorDiaria() {
+        ReservaCalculavel comWifi = new WifiDecorator(reserva);
+
+        assertEquals(new BigDecimal("795.00"), comWifi.getValorTotal());
+        assertEquals(List.of("Wi-Fi"), comWifi.getServicos());
+    }
+
+    @Test
     void petCobraValorPorEstadia() {
         ReservaCalculavel comPet = new PetDecorator(reserva, 2);
 
