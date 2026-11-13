@@ -2,7 +2,7 @@ package br.com.hotel.model;
 
 import java.math.BigDecimal;
 
-public final class EstacionamentoDecorator extends ReservaDecorator {
+public final class EstacionamentoDecorator extends ReservaDecorator {//camada de decoração para adicionar estacionamento à reserva
     private static final BigDecimal VALOR_POR_DIARIA = new BigDecimal("25.00");
 
     public EstacionamentoDecorator(ReservaCalculavel reserva) {

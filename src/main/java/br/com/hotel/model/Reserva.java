@@ -22,34 +22,34 @@ public final class Reserva implements ReservaCalculavel {
         }
     }
 
-    public Quarto getQuarto() {
+    public Quarto getQuarto() {//pega os dados do Quarto.java
         return quarto;
     }
 
-    public Hospede getHospede() {
+    public Hospede getHospede() {//pega os dados do Hospede.java
         return hospede;
     }
 
-    public LocalDate getCheckIn() {
+    public LocalDate getCheckIn() {//pega a data de check-in
         return checkIn;
     }
 
-    public LocalDate getCheckOut() {
+    public LocalDate getCheckOut() {//pega a data de check-out
         return checkOut;
     }
 
     @Override
-    public long getQuantidadeDiarias() {
+    public long getQuantidadeDiarias() {//calcula quantidade de dias de reserva
         return ChronoUnit.DAYS.between(checkIn, checkOut);
     }
 
     @Override
-    public BigDecimal getValorTotal() {
+    public BigDecimal getValorTotal() {//calcula o valor total da reserva multiplicando a diária do quarto pelo número de diárias
         return quarto.getDiaria().multiply(BigDecimal.valueOf(getQuantidadeDiarias()));
     }
 
     @Override
-    public List<String> getServicos() {
+    public List<String> getServicos() {//lista de serviços adicionais, como café da manhã, estacionamento e desconto percentual
         return List.of();
     }
 }

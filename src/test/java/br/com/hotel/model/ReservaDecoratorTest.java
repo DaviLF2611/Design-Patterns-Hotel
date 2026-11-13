@@ -53,6 +53,14 @@ class ReservaDecoratorTest {
     }
 
     @Test
+    void petCobraValorPorEstadia() {
+        ReservaCalculavel comPet = new PetDecorator(reserva, 2);
+
+        assertEquals(new BigDecimal("800.00"), comPet.getValorTotal());
+        assertEquals(List.of("2 Pet(s)"), comPet.getServicos());
+    }
+
+    @Test
     void descontoAbatePercentualDoTotalAcumulado() {
         ReservaCalculavel comDesconto = new DescontoPercentualDecorator(
                 reserva, new BigDecimal("10"));

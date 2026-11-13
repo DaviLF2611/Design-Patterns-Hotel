@@ -4,7 +4,7 @@ public final class Hospede {
     private final String nome;
     private final String email;
 
-    public Hospede(String nome, String email) {
+    public Hospede(String nome, String email) {//Classe representando um hóspede de hotel
         if (nome == null || nome.isBlank()) {
             throw new IllegalArgumentException("O nome do hóspede é obrigatório.");
         }
@@ -16,11 +16,11 @@ public final class Hospede {
         this.email = email;
     }
 
-    public String getNome() {
+    public String getNome() {//pega o nome do hospede
         return nome;
     }
 
-    public String getEmail() {
+    public String getEmail() {//pega o email do hospede
         return email;
     }
 }

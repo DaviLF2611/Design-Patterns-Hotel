@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
-public final class DescontoPercentualDecorator extends ReservaDecorator {
+public final class DescontoPercentualDecorator extends ReservaDecorator {//camada de decoração para aplicar desconto percentual à reserva
     private static final BigDecimal CEM = BigDecimal.valueOf(100);
 
     private final BigDecimal percentual;

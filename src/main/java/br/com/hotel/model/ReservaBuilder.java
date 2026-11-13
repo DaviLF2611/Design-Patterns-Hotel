@@ -2,7 +2,7 @@ package br.com.hotel.model;
 
 import java.time.LocalDate;
 
-public final class ReservaBuilder {
+public final class ReservaBuilder {//Classe para construir uma reserva de hotel
     private Quarto quarto;
     private Hospede hospede;
     private LocalDate checkIn;

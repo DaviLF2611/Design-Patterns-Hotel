@@ -3,7 +3,7 @@ package br.com.hotel.model;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public final class Quarto {
+public final class Quarto {//Classe representando um quarto de hotel
     private final int numero;
     private final String categoria;
     private final BigDecimal diaria;
@@ -25,15 +25,15 @@ public final class Quarto {
         this.diaria = diaria;
     }
 
-    public int getNumero() {
+    public int getNumero() {//metodo para pegar numero do quarto
         return numero;
     }
 
-    public String getCategoria() {
+    public String getCategoria() {//metodo para pegar categoria do quarto
         return categoria;
     }
 
-    public BigDecimal getDiaria() {
+    public BigDecimal getDiaria() {//metodo para pegar diaria do quarto
         return diaria;
     }
 }

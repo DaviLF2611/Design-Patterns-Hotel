@@ -82,6 +82,7 @@ Regras de cada decorador (considerando uma reserva de 3 diárias a 250,00):
 | `EstacionamentoDecorator` | 25,00 por diária | 75,00 |
 | `SpaDecorator` | 100,00 por estadia | 100,00 |
 | `DescontoPercentualDecorator` | abate um percentual do total acumulado | depende da cadeia |
+| `PetDecorator` | 25,00 por pet e por diária | 150,00 (2 pets) |
 
 O desconto incide sobre o total acumulado até aquele ponto, portanto a ordem
 da cadeia altera o resultado:
@@ -108,6 +109,7 @@ import br.com.hotel.model.Reserva;
 import br.com.hotel.model.ReservaBuilder;
 import br.com.hotel.model.ReservaCalculavel;
 import br.com.hotel.model.SpaDecorator;
+import br.com.hotel.model.PetDecorator;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 ```
@@ -131,7 +133,7 @@ import java.time.LocalDate;
   - `ReservaDecorator`: decorador abstrato (Template Method). Guarda o
     componente envolvido, soma `calcularAcrescimo()` ao total dele e acrescenta
     `descricao()` à lista de serviços.
-  - `CafeDaManhaDecorator`, `EstacionamentoDecorator`, `SpaDecorator` e
+  - `CafeDaManhaDecorator`, `EstacionamentoDecorator`, `SpaDecorator`,`PetDecorator` e
     `DescontoPercentualDecorator`: decoradores concretos, cada um com sua
     própria regra de cálculo.
 - **Problema resolvido:** permite adicionar serviços e descontos, combiná-los
@@ -152,7 +154,8 @@ src/
 │   ├── ReservaBuilder.java
 │   ├── ReservaCalculavel.java
 │   ├── ReservaDecorator.java
-│   └── SpaDecorator.java
+│   ├── SpaDecorator.java
+│   └── PetDecorator.java
 └── test/java/br/com/hotel/model/
     ├── ReservaBuilderTest.java
     └── ReservaDecoratorTest.java
@@ -167,3 +170,4 @@ elaboração deste README.
 
 - **Davi Luiz Francisco:** domínio do sistema e implementação do padrão Builder.
 - **Ismael Damasceno:** implementação do padrão Decorator.
+- **Enzo Coelho Morona:** implementação do PetDecorator.
