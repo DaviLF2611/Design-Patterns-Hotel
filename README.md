@@ -166,3 +166,4 @@ elaboração deste README.
 ## Contribuição dos integrantes
 
 - **Davi Luiz Francisco:** domínio do sistema e implementação do padrão Builder.
+- **Ismael Damasceno:** implementação do padrão Decorator.
