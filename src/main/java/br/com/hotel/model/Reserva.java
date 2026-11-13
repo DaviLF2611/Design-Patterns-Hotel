@@ -3,9 +3,10 @@ package br.com.hotel.model;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 
-public final class Reserva {
+public final class Reserva implements ReservaCalculavel {
     private final Quarto quarto;
     private final Hospede hospede;
     private final LocalDate checkIn;
@@ -37,11 +38,18 @@ public final class Reserva {
         return checkOut;
     }
 
+    @Override
     public long getQuantidadeDiarias() {
         return ChronoUnit.DAYS.between(checkIn, checkOut);
     }
 
+    @Override
     public BigDecimal getValorTotal() {
         return quarto.getDiaria().multiply(BigDecimal.valueOf(getQuantidadeDiarias()));
+    }
+
+    @Override
+    public List<String> getServicos() {
+        return List.of();
     }
 }
