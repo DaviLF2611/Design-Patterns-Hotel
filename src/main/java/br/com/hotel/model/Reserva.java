@@ -11,8 +11,11 @@ public final class Reserva implements ReservaCalculavel {
     private final Hospede hospede;
     private final LocalDate checkIn;
     private final LocalDate checkOut;
+    private final int quantidadeHospedes;
+    private final String observacao;
 
-    Reserva(Quarto quarto, Hospede hospede, LocalDate checkIn, LocalDate checkOut) {
+    Reserva(Quarto quarto, Hospede hospede, LocalDate checkIn, LocalDate checkOut,
+            int quantidadeHospedes, String observacao) {
         this.quarto = Objects.requireNonNull(quarto, "O quarto é obrigatório.");
         this.hospede = Objects.requireNonNull(hospede, "O hóspede é obrigatório.");
         this.checkIn = Objects.requireNonNull(checkIn, "A data de check-in é obrigatória.");
@@ -20,6 +23,8 @@ public final class Reserva implements ReservaCalculavel {
         if (!checkOut.isAfter(checkIn)) {
             throw new IllegalArgumentException("O check-out deve ocorrer depois do check-in.");
         }
+        this.quantidadeHospedes = quantidadeHospedes;
+        this.observacao = observacao == null ? "" : observacao;
     }
 
     public Quarto getQuarto() {//pega os dados do Quarto.java
@@ -36,6 +41,14 @@ public final class Reserva implements ReservaCalculavel {
 
     public LocalDate getCheckOut() {//pega a data de check-out
         return checkOut;
+    }
+
+    public int getQuantidadeHospedes() {
+        return quantidadeHospedes;
+    }
+
+    public String getObservacao() {
+        return observacao;
     }
 
     @Override
