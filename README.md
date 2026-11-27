@@ -40,6 +40,26 @@ Para gerar o pacote JAR:
 mvn package
 ```
 
+### Executar a demonstração
+
+Na raiz do repositório, compile e execute a reserva de exemplo no console.
+O `mvn package` também executa os testes:
+
+```shell
+mvn package
+java -cp target/classes br.com.hotel.Main
+```
+
+Trecho da saída esperada:
+
+```text
+Hospedagem: R$ 750,00
+Café da manhã: R$ 990,00
+Late checkout: R$ 1.070,00
+Transfer: R$ 1.190,00
+Taxa de 10%: R$ 1.309,00
+```
+
 ## Exemplos de uso
 
 ### Criar uma reserva
@@ -239,6 +259,11 @@ deste README são da equipe dona do projeto e seguem intactas.
 - Problema que resolve: monta a reserva e a cadeia de serviços em um único
   fluxo, sem o chamador encadear os decoradores à mão.
 
+**Demonstração no console**
+
+- `br.com.hotel.Main` monta o cenário completo da extensão, lista os serviços
+  contratados e mostra o total acumulado após cada serviço.
+
 ### Exemplo de uso
 
 Quarto 12 Standard (250,00, capacidade 2), Ana com 2 hóspedes, de 01/12 a
@@ -280,6 +305,8 @@ resultado. Com a taxa logo depois do café da manhã, o mesmo cenário fecha em
 
 ```shell
 mvn test
+mvn package
+java -cp target/classes br.com.hotel.Main
 ```
 
 Testes acrescentados na extensão:
@@ -296,6 +323,7 @@ Testes acrescentados na extensão:
 - **Alexandre Tibes ([@Xandetds](https://github.com/Xandetds)):** novos passos
   do Builder e capacidade do `Quarto`, teste de ponta a ponta, README e PR.
 - **Frank Cardoso ([@frank-cardoso](https://github.com/frank-cardoso)):**
-  `LateCheckoutDecorator` e `TransferAeroportoDecorator`.
+  `LateCheckoutDecorator`, `TransferAeroportoDecorator` e a demonstração
+  executável em `br.com.hotel.Main`.
 - **Gustavo Nunes Teixeira ([@ogustavonunes](https://github.com/ogustavonunes)):**
   `comServico`, `buildComServicos` e `TaxaDeServicoDecorator`.
