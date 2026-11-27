@@ -59,6 +59,20 @@ System.out.println(reserva.getQuantidadeDiarias()); // 3
 System.out.println(reserva.getValorTotal());        // 750.00
 ```
 
+A reserva também aceita a quantidade de hóspedes (de 1 até a capacidade do
+quarto) e uma observação de até 200 caracteres:
+
+```java
+Reserva reserva = new ReservaBuilder()
+        .quarto(new Quarto(12, "Standard", new BigDecimal("250.00"), 2))
+        .hospede(hospede)
+        .checkIn(LocalDate.of(2026, 12, 1))
+        .checkOut(LocalDate.of(2026, 12, 4))
+        .quantidadeHospedes(2)
+        .observacao("chegada depois das 22h")
+        .build();
+```
+
 ### Compor serviços e descontos
 
 Cada decorador envolve um `ReservaCalculavel` (uma `Reserva` ou outro
@@ -84,6 +98,9 @@ Regras de cada decorador (considerando uma reserva de 3 diárias a 250,00):
 | `WifiDecorator` | 15,00 por diária | 45,00 |
 | `DescontoPercentualDecorator` | abate um percentual do total acumulado | depende da cadeia |
 | `PetDecorator` | 25,00 por pet e por diária | 150,00 (2 pets) |
+| `LateCheckoutDecorator` | 80,00 por estadia | 80,00 |
+| `TransferAeroportoDecorator` | 60,00 por trecho (1 ou 2 trechos) | 120,00 (ida e volta) |
+| `TaxaDeServicoDecorator` | soma um percentual (0 a 20%) sobre o total acumulado | depende da cadeia |
 
 O desconto incide sobre o total acumulado até aquele ponto, portanto a ordem
 da cadeia altera o resultado:
@@ -151,15 +168,22 @@ src/
 │   ├── DescontoPercentualDecorator.java
 │   ├── EstacionamentoDecorator.java
 │   ├── Hospede.java
+│   ├── LateCheckoutDecorator.java
 │   ├── Quarto.java
 │   ├── Reserva.java
 │   ├── ReservaBuilder.java
 │   ├── ReservaCalculavel.java
 │   ├── ReservaDecorator.java
 │   ├── SpaDecorator.java
+│   ├── TaxaDeServicoDecorator.java
+│   ├── TransferAeroportoDecorator.java
 │   ├── WifiDecorator.java
 │   └── PetDecorator.java
 └── test/java/br/com/hotel/model/
+    ├── ExtensaoParte2Test.java
+    ├── QuartoTest.java
+    ├── ReservaBuilderPassosTest.java
+    ├── ReservaBuilderServicosTest.java
     ├── ReservaBuilderTest.java
     └── ReservaDecoratorTest.java
 ```
@@ -175,3 +199,103 @@ elaboração deste README.
 - **Ismael Damasceno:** implementação do padrão Decorator.
 - **Enzo Coelho Morona:** implementação do PetDecorator.
 - **Ísis Enya D'Agostin Flor:** implementação do WifiDecorator.
+
+## Extensão (Parte 2) — equipe Cantina
+
+Esta seção foi acrescentada pela equipe do projeto Cantina, como extensão do
+trabalho de Design Patterns. Nenhuma assinatura pública que já existia foi
+alterada, e os testes originais continuam como estavam. As seções anteriores
+deste README são da equipe dona do projeto e seguem intactas.
+
+### O que foi adicionado
+
+**Builder: novos passos de montagem**
+
+- `Quarto` ganhou a capacidade (`getCapacidade()`). O construtor de três
+  parâmetros continua existindo e assume capacidade 2.
+- `ReservaBuilder.quantidadeHospedes(int)`: padrão 1, precisa ficar entre 1 e a
+  capacidade do quarto.
+- `ReservaBuilder.observacao(String)`: padrão vazio, aceita até 200 caracteres
+  e remove espaços nas pontas.
+- `Reserva` expõe `getQuantidadeHospedes()` e `getObservacao()`.
+- Problema que resolve: a reserva passa a ter mais dados opcionais sem
+  precisar de construtores longos, e a validação continua toda no `build()`.
+
+**Decorator: novos serviços**
+
+- `LateCheckoutDecorator`: 80,00 por estadia.
+- `TransferAeroportoDecorator`: 60,00 por trecho, aceita 1 (ida) ou 2 (ida e
+  volta) trechos.
+- `TaxaDeServicoDecorator`: soma um percentual de 0 a 20% sobre o total
+  acumulado, o oposto do `DescontoPercentualDecorator`.
+
+**Builder e Decorator juntos**
+
+- `ReservaBuilder.comServico(UnaryOperator<ReservaCalculavel>)` guarda os
+  serviços na ordem em que foram pedidos.
+- `ReservaBuilder.buildComServicos()` valida a reserva pelo `build()` e depois
+  envolve o resultado com cada serviço, na mesma ordem.
+- O `build()` continua devolvendo uma `Reserva` simples, sem serviços.
+- Problema que resolve: monta a reserva e a cadeia de serviços em um único
+  fluxo, sem o chamador encadear os decoradores à mão.
+
+### Exemplo de uso
+
+Quarto 12 Standard (250,00, capacidade 2), Ana com 2 hóspedes, de 01/12 a
+04/12 (3 diárias):
+
+```java
+ReservaCalculavel reserva = new ReservaBuilder()
+        .quarto(new Quarto(12, "Standard", new BigDecimal("250.00"), 2))
+        .hospede(new Hospede("Ana Silva", "ana@example.com"))
+        .checkIn(LocalDate.of(2026, 12, 1))
+        .checkOut(LocalDate.of(2026, 12, 4))
+        .quantidadeHospedes(2)
+        .observacao("chegada depois das 22h")
+        .comServico(r -> new CafeDaManhaDecorator(r, 2))
+        .comServico(LateCheckoutDecorator::new)
+        .comServico(r -> new TransferAeroportoDecorator(r, 2))
+        .comServico(r -> new TaxaDeServicoDecorator(r, new BigDecimal("10")))
+        .buildComServicos();
+
+System.out.println(reserva.getValorTotal()); // 1309.00
+System.out.println(reserva.getServicos());
+// [Café da manhã para 2 pessoa(s), Late checkout,
+//  Transfer aeroporto (2 trecho(s)), Taxa de serviço de 10%]
+```
+
+| Passo | Valor |
+|---|---|
+| Hospedagem (3 × 250,00) | 750,00 |
+| + Café da manhã para 2 (40,00 × 3 × 2) | 990,00 |
+| + Late checkout | 1.070,00 |
+| + Transfer aeroporto, 2 trechos (60,00 × 2) | 1.190,00 |
+| + Taxa de serviço de 10% | 1.309,00 |
+
+Como a taxa incide sobre o total acumulado, a ordem dos `comServico` muda o
+resultado. Com a taxa logo depois do café da manhã, o mesmo cenário fecha em
+1.289,00.
+
+### Como testar
+
+```shell
+mvn test
+```
+
+Testes acrescentados na extensão:
+
+- `QuartoTest`: capacidade padrão e capacidade informada.
+- `ReservaBuilderPassosTest`: hóspedes, observação e seus limites.
+- `ReservaBuilderServicosTest`: `comServico`, `buildComServicos` e
+  `TaxaDeServicoDecorator`.
+- `ExtensaoParte2Test`: o cenário acima de ponta a ponta, a ordem dos serviços
+  e a validação do builder na reserva com serviços.
+
+### Contribuição da equipe extensora
+
+- **Alexandre Tibes ([@Xandetds](https://github.com/Xandetds)):** novos passos
+  do Builder e capacidade do `Quarto`, teste de ponta a ponta, README e PR.
+- **Frank Cardoso ([@frank-cardoso](https://github.com/frank-cardoso)):**
+  `LateCheckoutDecorator` e `TransferAeroportoDecorator`.
+- **Gustavo Nunes Teixeira ([@ogustavonunes](https://github.com/ogustavonunes)):**
+  `comServico`, `buildComServicos` e `TaxaDeServicoDecorator`.
