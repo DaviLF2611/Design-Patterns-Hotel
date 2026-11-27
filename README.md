@@ -30,6 +30,17 @@ mvn -version
 
 Na raiz do repositório, compile o projeto e execute os testes:
 
+O projeto exige Java 17 e Maven 3.6.3 ou superior. Nesta máquina, o terminal
+usa Java 8 e Maven 3.5.4 por padrão. Selecione as versões instaladas antes de
+executar os comandos:
+
+```shell
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export PATH="/opt/mvnd/mvn/bin:$JAVA_HOME/bin:$PATH"
+java -version
+mvn -version
+```
+
 ```shell
 mvn test
 ```
