@@ -1,6 +1,10 @@
 package br.com.hotel.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 public final class ReservaBuilder {//Classe para construir uma reserva de hotel
     static final int TAMANHO_MAXIMO_OBSERVACAO = 200;
@@ -11,6 +15,7 @@ public final class ReservaBuilder {//Classe para construir uma reserva de hotel
     private LocalDate checkOut;
     private int quantidadeHospedes = 1;
     private String observacao = "";
+    private final List<UnaryOperator<ReservaCalculavel>> servicos = new ArrayList<>();
 
     public ReservaBuilder quarto(Quarto quarto) {
         this.quarto = quarto;
@@ -42,6 +47,12 @@ public final class ReservaBuilder {//Classe para construir uma reserva de hotel
         return this;
     }
 
+    public ReservaBuilder comServico(UnaryOperator<ReservaCalculavel> servico) {
+        Objects.requireNonNull(servico, "O serviço não pode ser nulo.");
+        this.servicos.add(servico);
+        return this;
+    }
+
     public Reserva build() {
         if (quarto == null || hospede == null || checkIn == null || checkOut == null) {
             throw new IllegalStateException(
@@ -59,5 +70,13 @@ public final class ReservaBuilder {//Classe para construir uma reserva de hotel
                     "A observação deve ter no máximo " + TAMANHO_MAXIMO_OBSERVACAO + " caracteres.");
         }
         return new Reserva(quarto, hospede, checkIn, checkOut, quantidadeHospedes, observacao);
+    }
+
+    public ReservaCalculavel buildComServicos() {
+        ReservaCalculavel reserva = build();
+        for (UnaryOperator<ReservaCalculavel> servico : servicos) {
+            reserva = Objects.requireNonNull(servico.apply(reserva), "O serviço aplicado retornou nulo.");
+        }
+        return reserva;
     }
 }
